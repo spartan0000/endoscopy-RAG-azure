@@ -15,6 +15,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import logging
 from datetime import datetime
 
+  
+
 from clients import chat_client, embedding_client
 
 load_dotenv()
