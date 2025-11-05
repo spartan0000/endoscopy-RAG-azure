@@ -20,8 +20,8 @@ from datetime import datetime
 
   
 
-from clients import chat_client, embedding_client
-from functions import format_query_json, format_query_summary, get_embedding, query_collection, generate_recommendation
+from app.clients import chat_client, embedding_client
+from app.functions import format_query_json, format_query_summary, get_embedding, query_collection, generate_recommendation
 
 
 load_dotenv()

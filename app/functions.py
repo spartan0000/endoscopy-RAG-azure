@@ -17,7 +17,7 @@ from datetime import datetime
 
   
 
-from clients import chat_client, embedding_client
+from app.clients import chat_client, embedding_client
 
 load_dotenv()
 
