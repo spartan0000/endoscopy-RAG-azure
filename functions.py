@@ -61,7 +61,7 @@ async def format_query_json(user_query: str) -> dict:
     user_prompt = f'Please format this medical text into structured JSON output - {user_query}'
 
     response1 = await chat_client.responses.create(
-        model = 'gpt-4o-mini',
+        model = 'gpt-5-mini',
         text = {'format': {'type': 'json_object'}},
         input = [
             {
@@ -130,7 +130,7 @@ def query_collection(embedding: List[float], collection, n_results: int = 10) ->
         db_output = [
             {'document': doc,
              'metadata': meta,}
-             for doc, meta in zip(results['document'][0], results['metadatas'][0])
+             for doc, meta in zip(results['documents'][0], results['metadatas'][0])
         ]
         return db_output
     else:
@@ -138,11 +138,14 @@ def query_collection(embedding: List[float], collection, n_results: int = 10) ->
 
 async def generate_recommendation(db_result: List[dict], user_query: str) -> str:
     system_prompt = """
+    
 You are a helpful medical assistant who is tasked with making evidence based recommendations for follow up after a colonoscopy
         You will take the user query which includes medical information as well as the protocol that is pulled from the vector database, provide recommendations for follow up that meet the guidelines
         as stated in the documents that are provided.  If it is unclear what the recommendations should be or if the patient's data does not meet any of the criteria in the documents, simply output 
         'review by surgeon'. If there is uncertainty between two possible time intervals, choose the shorter one - for example if the choice is between 6 months or 12 months, choose 6 months.
-        Provide a detailed explanation for your recommendation based on the protocols and data provided."""
+        Provide a detailed explanation for your recommendation based on the protocols and data provided.  You do not need to generate any patient notes or documentation.  A recommendation
+        based on the provided protocols and user query is all that is needed"""
+    
     db_docs = "".join(db_result[i]['document'] for i in range(len(db_result)))
     response = await chat_client.responses.create(
         model = 'gpt-5-mini',
