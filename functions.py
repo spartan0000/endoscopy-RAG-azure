@@ -120,3 +120,43 @@ async def get_embedding(text: str) -> List[float]:
     return response.data[0].embedding
 
 
+def query_collection(embedding: List[float], collection, n_results: int = 10) -> List[dict]:
+    results = collection.query(
+        query_embeddings = [embedding],
+        n_results = n_results,
+    )
+
+    if results['documents']:
+        db_output = [
+            {'document': doc,
+             'metadata': meta,}
+             for doc, meta in zip(results['document'][0], results['metadatas'][0])
+        ]
+        return db_output
+    else:
+        return []
+
+async def generate_recommendation(db_result: List[dict], user_query: str) -> str:
+    system_prompt = """
+You are a helpful medical assistant who is tasked with making evidence based recommendations for follow up after a colonoscopy
+        You will take the user query which includes medical information as well as the protocol that is pulled from the vector database, provide recommendations for follow up that meet the guidelines
+        as stated in the documents that are provided.  If it is unclear what the recommendations should be or if the patient's data does not meet any of the criteria in the documents, simply output 
+        'review by surgeon'. If there is uncertainty between two possible time intervals, choose the shorter one - for example if the choice is between 6 months or 12 months, choose 6 months.
+        Provide a detailed explanation for your recommendation based on the protocols and data provided."""
+    db_docs = "".join(db_result[i]['document'] for i in range(len(db_result)))
+    response = await chat_client.responses.create(
+        model = 'gpt-5-mini',
+        input = [
+            {'role': 'system',
+             'content': system_prompt
+             },
+            {'role': 'user',
+             'content': user_query
+             },
+            {'role': 'user',
+             'content': db_docs}
+        ]
+    )
+
+    return response.output_text
+
