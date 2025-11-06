@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 import langchain
 
 import asyncio
+import requests
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -163,3 +164,16 @@ You are a helpful medical assistant who is tasked with making evidence based rec
 
     return response.output_text
 
+async def send_request(report_text: str, api_url: str):
+    '''
+    Sends a free text reort to the API endpoint and returns a recommendation based on the report and database contents
+    '''
+
+    data = {'user_query': report_text}
+
+    response = requests.post(api_url, json = data)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise Exception(f'API request failed with status code {response.status_code}: {response.text}')
