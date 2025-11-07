@@ -15,8 +15,8 @@ report_file = os.path.join(data_path, 'sample_patient_report_1.txt')
 with open(report_file, 'r', encoding = 'utf-8') as f:
     report = f.read()
 
-api_url_rec = 'http://127.0.0.1:8000/recommend'
-api_url_summary = 'http://127.0.0.1:8000/summarize'
+api_url_rec = 'http://localhost:8000/recommend'
+api_url_summary = 'http://localhost:8000/summarize'
 
 
 async def send_request(report_text: str, api_url: str):

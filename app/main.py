@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 from app.functions import format_query_json, format_query_summary, get_embedding, query_collection, generate_recommendation
 
-chroma_client = chromadb.PersistentClient(path = os.getenv('CHROMA_PATH'))
+chroma_client = chromadb.PersistentClient(path = './data/chroma_db')
 collection = chroma_client.get_or_create_collection(name = 'endoscopy_protocol')
 
 app = FastAPI(title = "Colonoscopy Triage Recommendation API")
