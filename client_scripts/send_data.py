@@ -9,14 +9,20 @@ import asyncio
 load_dotenv()
 
 data_path = os.getenv('DATA_PATH')
+base_url = os.getenv('AZURE_APP_ENDPOINT')
 
 report_file = os.path.join(data_path, 'sample_patient_report_1.txt')
 
 with open(report_file, 'r', encoding = 'utf-8') as f:
     report = f.read()
 
-api_url_rec = 'http://localhost:8000/recommend'
-api_url_summary = 'http://localhost:8000/summarize'
+api_url_rec = f'{base_url}/recommend'
+api_url_summary = f'{base_url}/summarize'
+api_url_json_summary = f'{base_url}/json_summary'
+
+test_url_rec = 'http://127.0.0.1:8000/recommend'
+test_url_summary = 'http://127.0.0.1:8000/summarize'
+test_url_json_summary = 'http://127.0.0.1:8000/json_summary'
 
 
 async def send_request(report_text: str, api_url: str):
@@ -25,8 +31,11 @@ async def send_request(report_text: str, api_url: str):
     '''
 
     data = {'user_query': report_text}
+    headers = {
+        'x-api-key': os.getenv('MY_API_KEY')
+    }
 
-    response = requests.post(api_url, json = data)
+    response = requests.post(api_url, json = data, headers = headers)
 
     if response.status_code == 200:
         return response.json()
@@ -37,10 +46,12 @@ async def send_request(report_text: str, api_url: str):
 
 async def main():
 
-    response_recommendation = await send_request(report, api_url_rec)
-    summary = await send_request(report, api_url_summary) #we just want summary in json format because it returns both a text summary and a json summary
+    response_recommendation = await send_request(report, test_url_rec)
+    json_summary = await send_request(report, test_url_json_summary)
+    summary = await send_request(report, test_url_summary) #we just want summary in json format because it returns both a text summary and a json summary
     
     print(f'Summary Response: {summary}')
+    print(f'JSON Summary Response: {json_summary}')
     print(f'Recommendation Response: {response_recommendation['recommendation']}')
 
 
