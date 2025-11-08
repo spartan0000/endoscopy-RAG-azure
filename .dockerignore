@@ -14,6 +14,7 @@ logs/
 data/
 logs/
 chroma_db/
+tests/
 *.sqlite3
 *.parquet
 *.bin
