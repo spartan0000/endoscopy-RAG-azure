@@ -20,9 +20,9 @@ api_url_rec = f'{base_url}/recommend'
 api_url_summary = f'{base_url}/summarize'
 api_url_json_summary = f'{base_url}/json_summary'
 
-test_url_rec = 'http://127.0.0.1:8000/recommend'
-test_url_summary = 'http://127.0.0.1:8000/summarize'
-test_url_json_summary = 'http://127.0.0.1:8000/json_summary'
+test_url_rec = 'http://localhost:8000/recommend'
+test_url_summary = 'http://localhost:8000/summarize'
+test_url_json_summary = 'http://localhost:8000/json_summary'
 
 
 async def send_request(report_text: str, api_url: str):

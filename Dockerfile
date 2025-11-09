@@ -5,6 +5,9 @@ WORKDIR /colonoscopy-triage-azure
 
 #copy requirements file, install dependencies
 COPY requirements.txt .
+
+RUN pip install --upgrade pip
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 #copy code
