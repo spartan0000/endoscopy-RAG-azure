@@ -41,14 +41,14 @@ async def send_request(report_text: str, api_url: str):
         return response.json()
     else:
         raise Exception(f'API request failed with status code {response.status_code}: {response.text}')
-    
+       
     
 
 async def main():
 
-    response_recommendation = await send_request(report, test_url_rec)
-    json_summary = await send_request(report, test_url_json_summary)
-    summary = await send_request(report, test_url_summary) #we just want summary in json format because it returns both a text summary and a json summary
+    response_recommendation = await send_request(report, api_url_rec)
+    json_summary = await send_request(report, api_url_json_summary)
+    summary = await send_request(report, api_url_summary) #we just want summary in json format because it returns both a text summary and a json summary
     
     print(f'Summary Response: {summary}')
     print(f'JSON Summary Response: {json_summary}')

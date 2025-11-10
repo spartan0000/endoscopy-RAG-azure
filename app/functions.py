@@ -177,3 +177,23 @@ async def send_request(report_text: str, api_url: str):
         return response.json()
     else:
         raise Exception(f'API request failed with status code {response.status_code}: {response.text}')
+
+
+class JSONFormatter(logging.Formatter):
+    def format(self, record):
+        log_record = {
+            'timestamp': self.formatTime(record),
+            'level': record.levelname,
+            'message': record.getMessage()
+        }
+        if hasattr(record, 'extra_data'):
+            log_record['extra'] = record.extra_data
+        
+        return json.dumps(log_record)
+
+logger = logging.getLogger('colonoscopy_triage_api_logger')
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(JSONFormatter())
+logger.addHandler(handler)
+logger.propagate = False

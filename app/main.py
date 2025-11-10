@@ -7,10 +7,14 @@ from dotenv import load_dotenv
 import chromadb
 import asyncio
 from pydantic import BaseModel
+import logging
+import sys
 
 load_dotenv()
 
-from app.functions import format_query_json, format_query_summary, get_embedding, query_collection, generate_recommendation
+
+
+from app.functions import format_query_json, format_query_summary, get_embedding, query_collection, generate_recommendation, logger
 
 chroma_client = chromadb.PersistentClient(path = './data/chroma_db')
 collection = chroma_client.get_or_create_collection(name = 'endoscopy_protocol')
@@ -55,7 +59,21 @@ async def recommendation(request: SummarizeRequest):
 
     query_embedding = await get_embedding(summary)
     results = query_collection(query_embedding, collection, n_results = 10)
+    document_contents = [r['document'][:200] for r in results]
     rec = await generate_recommendation(results, user_query)
+    #the results variable contains the documents and metadatas retrieved from the database
+    #
+    logger.info("User input received and recommendation generated",
+                 extra = {
+                     "extra_data": {
+                         'user_query': user_query, 
+                         'documents': results, 
+                         'document_contents': document_contents,
+                         'recommendation': rec,
+                         }
+                 }
+        )
+    
 
     return {'recommendation': rec}
  
