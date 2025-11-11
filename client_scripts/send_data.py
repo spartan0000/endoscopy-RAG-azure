@@ -11,7 +11,7 @@ load_dotenv()
 data_path = os.getenv('DATA_PATH')
 base_url = os.getenv('AZURE_APP_ENDPOINT')
 
-report_file = os.path.join(data_path, 'sample_patient_report_1.txt')
+report_file = os.path.join(data_path, 'sample_patient_report_2.txt')
 
 with open(report_file, 'r', encoding = 'utf-8') as f:
     report = f.read()

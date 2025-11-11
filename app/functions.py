@@ -11,6 +11,8 @@ import langchain
 import asyncio
 import requests
 
+import random
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 import logging
