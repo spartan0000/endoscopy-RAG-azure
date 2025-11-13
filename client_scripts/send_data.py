@@ -11,7 +11,7 @@ load_dotenv()
 data_path = os.getenv('DATA_PATH')
 base_url = os.getenv('AZURE_APP_ENDPOINT')
 
-report_file = os.path.join(data_path, 'sample_patient_report_6.txt')
+report_file = os.path.join(data_path, 'sample_patient_report_1.txt')
 
 with open(report_file, 'r', encoding = 'utf-8') as f:
     report = f.read()
@@ -46,9 +46,9 @@ async def send_request(report_text: str, api_url: str):
 
 async def main():
 
-    response_recommendation = await send_request(report, api_url_rec)
-    json_summary = await send_request(report, api_url_json_summary)
-    summary = await send_request(report, api_url_summary) #we just want summary in json format because it returns both a text summary and a json summary
+    response_recommendation = await send_request(report, test_url_rec)
+    json_summary = await send_request(report, test_url_json_summary)
+    summary = await send_request(report, test_url_summary) #we just want summary in json format because it returns both a text summary and a json summary
     
     print(f'Summary Response: {summary}\n')
     print(f'JSON Summary Response: {json_summary}\n')
